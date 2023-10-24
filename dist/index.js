@@ -29752,6 +29752,7 @@ const httpm = __nccwpck_require__(9036);
 const github = __nccwpck_require__(8194);
 const core = __nccwpck_require__(4237);
 const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
 
 async function run() {
     try {
@@ -29770,8 +29771,8 @@ async function run() {
     }
 }
 
-function readChangeLog(path) {
-    return fs.readFileSync(path, 'utf8');
+function readChangeLog(filename) {
+    return fs.readFileSync(path.resolve(process.cwd(), filename), 'utf8');
 }
 
 function getServiceName() {

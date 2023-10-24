@@ -2,6 +2,7 @@ const httpm = require('@actions/http-client');
 const github = require('@actions/github');
 const core = require('@actions/core');
 const fs = require('fs');
+const path = require('path');
 
 async function run() {
     try {
@@ -20,8 +21,8 @@ async function run() {
     }
 }
 
-function readChangeLog(path) {
-    return fs.readFileSync(path, 'utf8');
+function readChangeLog(filename) {
+    return fs.readFileSync(path.resolve(process.cwd(), filename), 'utf8');
 }
 
 function getServiceName() {
