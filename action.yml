@@ -1,0 +1,16 @@
+name: Slack Release Notification
+description: Push release notification to Slack
+
+inputs:
+  service-name:
+    description: 'Name of the service'
+    required: false
+  changelog-path:
+    description: 'Path to changelog file'
+    required: false
+    default: 'CHANGELOG.md'
+
+runs:
+  using: node20
+  main: index.js
+  
