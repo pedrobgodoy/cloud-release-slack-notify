@@ -21,7 +21,7 @@ async function run() {
 }
 
 function readChangeLog(path) {
-    return fs.readFileSync('../'+path, 'utf8');
+    return fs.readFileSync(path, 'utf8');
 }
 
 function getServiceName() {
