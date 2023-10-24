@@ -5,7 +5,7 @@ inputs:
   service-name:
     description: 'Name of the service'
     required: false
-  changelog-path:
+  change-log-path:
     description: 'Path to changelog file'
     required: false
     default: 'CHANGELOG.md'
