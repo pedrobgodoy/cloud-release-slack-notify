@@ -29751,6 +29751,7 @@ function wrappy (fn, cb) {
 const httpm = __nccwpck_require__(9036);
 const github = __nccwpck_require__(8194);
 const core = __nccwpck_require__(4237);
+const fs = __nccwpck_require__(7147);
 
 async function run() {
     try {

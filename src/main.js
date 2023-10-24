@@ -1,6 +1,7 @@
 const httpm = require('@actions/http-client');
 const github = require('@actions/github');
 const core = require('@actions/core');
+const fs = require('fs');
 
 async function run() {
     try {
