@@ -8,4 +8,4 @@ clean:
 
 build:
 	@echo "Building..."
-	npx esbuild "src/index.js" --bundle --minify --platform=node --format=cjs --outfile="${BUILD_DIR}/index.js"
+	npx esbuild "src/index.js" --bundle --minify --platform=node --format=cjs --outfile="${BUILD_DIR}/index.js" --external:@actions/*
