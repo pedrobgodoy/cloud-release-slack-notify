@@ -46,6 +46,7 @@ async function sendMessage(blocks, webhookUrl) {
         if (response.message.statusCode !== 200) {
             core.setFailed(`Request failed with status code ${response.message.statusCode}`);
         }
+        response.message.destroy();
     } catch (error) {
         core.setFailed(error.message);
     }
@@ -67,12 +68,22 @@ function parseMarkdown(markdown) {
             const url = line.match(/\((.*?)\)/)[1];
             elements.push({ type: 'Header', raw: line, version, date, url });
         }
+        if (line.match(/^# \d+.\d+.\d+/)) {
+            const version = line.match(/# (.*?) /)[1];
+            const date = line.match(/\d{4}-\d{2}-\d{2}/)[0];
+            elements.push({ type: 'Header', raw: line, version, date });
+        }
         if (line.startsWith('### ')) {
             const title = line.replace('### ', '');
             elements.push({ type: 'Section', raw: line, title });
         }
         if (line.startsWith('* ')) {
-            let item = line.replace('* ', '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+            let item = line
+                .replaceAll('**', '')
+                .replaceAll('* ', '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;');
             let itemCpy = item;
             const links = item.match(/\[(.*?)\]\((.*?)\)/g);
             const sections = [];
@@ -135,13 +146,23 @@ function parseMarkdown(markdown) {
  */
 function versionToBlocks(version) {
     const blocks = [];
-    blocks.push({
-        type: 'section',
-        text: {
-            type: 'mrkdwn',
-            text: `<${version.header.url}|${version.header.version}> (${version.header.date})`,
-        },
-    });
+    if (version.header.url) {
+        blocks.push({
+            type: 'section',
+            text: {
+                type: 'mrkdwn',
+                text: `<${version.header.url}|${version.header.version}> (${version.header.date})`,
+            },
+        });
+    } else {
+        blocks.push({
+            type: 'section',
+            text: {
+                type: 'mrkdwn',
+                text: `${version.header.version} (${version.header.date})`,
+            },
+        });
+    }
     for (const section of version.sections) {
         blocks.push({
             type: 'rich_text',
@@ -200,7 +221,7 @@ function addHeader(blocks, serviceName) {
             type: 'header',
             text: {
                 type: 'plain_text',
-                text: `${serviceName} Release Note`,
+                text: `Release Note - ${serviceName}`,
             },
         },
     ];
